@@ -1,0 +1,80 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: grafana
+spec:
+  ingress:
+    enabled: True
+    hostname: grafana.hbinsight.local
+    pathType: Prefix
+    path: '/'
+    tlsEnabled: True
+    tlsSecretName: grafana-hkb-crt
+    annotations: # Additional annotations for the Ingress or Route
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "hkb-trust-issuer"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;
+        grpc_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;      
+  config:
+    auth:
+      disable_signout_menu: true
+    auth.anonymous:
+      enabled: true
+    log:
+      level: warn
+      mode: console
+    security:
+      admin_password: secret
+      admin_user: root
+  dashboardLabelSelector:
+    - matchExpressions:
+        - key: app
+          operator: In
+          values:
+            - grafana
+
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: prometheus-grafanadatasource
+spec:
+  datasources:
+    - access: proxy
+      editable: true
+      isDefault: true
+      jsonData:
+        timeInterval: 5s
+      name: Prometheus
+      type: prometheus
+      url: 'http://prometheus-operated:9090'
+      version: 1
+  name: prometheus-datasources.yaml
+---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-grafana
+#   annotations:
+#     kubernetes.io/ingress.class: "nginx"
+#     cert-manager.io/cluster-issuer: "hkb-trust-issuer"
+#     nginx.ingress.kubernetes.io/configuration-snippet: |
+#       proxy_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;
+#       grpc_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;      
+# spec:
+#   tls:
+#     - hosts:
+#       - grafana.hbinsight.local
+#       secretName: grafana-hkb-crt
+#   rules:
+#   - host: grafana.hbinsight.local
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: grafana-service
+#             port:
+#               number: 3000

@@ -1,0 +1,52 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: main
+  labels:
+    prometheus: main
+spec:
+  replicas: 1
+  serviceMonitorSelector: {}
+    # matchLabels:
+    #   operated-prometheus: 'true'
+  alerting:
+    alertmanagers:
+    - namespace: prometheus
+      name: alertmanager-main
+      port: web
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: alertmanager-main
+spec:
+  replicas: 1
+  alertmanagerConfigSelector: {}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-prometheus
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "hkb-trust-issuer"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;
+      grpc_set_header l5d-dst-override $service_name.$namespace.svc.cluster.local:$service_port;      
+spec:
+  tls:
+    - hosts:
+      - prometheus.hbinsight.local
+      secretName: prometheus-hkb-crt
+  rules:
+  - host: prometheus.hbinsight.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-operated
+            port:
+              number: 9090

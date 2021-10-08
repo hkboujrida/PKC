@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:5.8.0-apache
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+          - name: WORDPRESS_DB_HOST
+            value: mysql
+          - name: WORDPRESS_DB_NAME
+            value: wordpress
+          - name: WORDPRESS_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: user
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  selector:
+    app: wordpress
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  labels:
+    name: wordpress-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "hkb-trust-issuer"
+spec:
+  tls:
+    - hosts:
+      - wordpress.hbinsight.local
+      secretName: wordpress-cert
+  rules:
+  - host: wordpress.hbinsight.local
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: wordpress
+            port: 
+              number: 80
+
