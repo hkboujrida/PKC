@@ -1,0 +1,58 @@
+# See https://github.com/rancher/k3os/blob/master/README.md#configuration
+# and https://github.com/rancher/k3os/blob/master/README.md#remastering-iso
+# This file is a placeholder for custom configuration when building a custom ISO image.
+ssh_authorized_keys:
+- "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDHzIcYAQN9sMVOg4Xr5FuqedSQAc1n2ZaL6yZXvB74pjJUZ/Sltn57QfAG8kq6RdrgznONovTlAUgxo6VvXvbqfK3bC3aRd7IXJxThNx+oLgV1t8X5pK87yh9jSeXgGfN9QS2eka/ovxBmWuUNYe3yoFjXmVJjM6XD0/57xRAgRaLXHzWptGFTvbPsApoVmrGGMppFaTxCyuOOF/wJydwcZWxx7CulEYIxS6OV/ti1GcBRtqAiB/lo0HRcmOF9iXDhXHdG6T0+1ijTxswaw9WjbcXhr6Q0T5Jra2p9fpU/sxKixmeKC9iLv6VC2dUjgOxXilmygJ61yrWSSNfkw+9w53WapriYgGQ/TvM2rYA9PCWwfHZzTXw2MF/dLyK8GwJWhVITGZn7tToBFIuUUB6Ogy+KfR6pv/epq4Veev1k/Q8WdZY22r6IpNtegBC3nPKT6HP60byI5UcuJnwn94910+oqmAAyIy0TwBh9XodBmmLwDGrxyloVa0h4MMGGOQM= dotexec@dotexec-pc"
+
+write_files:
+- encoding: ""
+  content: |-
+    #!/bin/bash
+    echo hello, local service start
+  owner: root
+  path: /etc/local.d/example.start
+  permissions: '0755'
+hostname: myhost
+init_cmd:
+- "echo hello, init command"
+boot_cmd:
+- "echo hello, boot command"
+run_cmd:
+- "echo hello, run command"
+
+k3os:
+  # data_sources:
+  # - aws
+  # - cdrom
+  modules:
+  - kvm
+  - nvme
+  sysctl:
+    kernel.printk: "4 4 1 7"
+    kernel.kptr_restrict: "1"
+  dns_nameservers:
+  - 8.8.8.8
+  - 1.1.1.1
+  ntp_servers:
+  - 0.us.pool.ntp.org
+  - 1.us.pool.ntp.org
+  # wifi:
+  # - name: home
+  #   passphrase: mypassword
+  # - name: nothome
+  #   passphrase: somethingelse
+  password: rancher
+  server_url: https://someserver:6443
+  token: TOKEN_VALUE
+  labels:
+    region: us-west-1
+    somekey: somevalue
+  k3s_args:
+  - server
+  - "--cluster-init"
+  environment:
+    http_proxy: http://myserver
+    https_proxy: http://myserver
+  taints:
+  - key1=value1:NoSchedule
+  - key1=value1:NoExecute
