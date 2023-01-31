@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+  
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: longhorn-system
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: longhorn
+    role: alert-rules
+  name: prometheus-longhorn-rules
+  
+spec:
+  groups:
+  - name: longhorn.rules
+    rules:
+    - alert: LonghornVolumeUsageCritical
+      annotations:
+        description: Longhorn volume {{$labels.volume}} on {{$labels.node}} is at {{$value}}% used for
+          more than 5 minutes.
+        summary: Longhorn volume capacity is over 90% used.
+      expr: 100 * (longhorn_volume_usage_bytes / longhorn_volume_capacity_bytes) > 90
+      for: 5m
+      labels:
+        issue: Longhorn volume {{$labels.volume}} usage on {{$labels.node}} is critical.
+        severity: critical
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: longhorn
+  
+spec:
+  replicas: 2
+  serviceAccountName: prometheus
+  alerting:
+    alertmanagers:
+      - namespace: longhorn-system
+        name: alertmanager-longhorn
+        port: web
+  serviceMonitorSelector:
+    matchLabels:
+      name: longhorn-prometheus-servicemonitor
+  ruleSelector:
+    matchLabels:
+      prometheus: longhorn
+      role: alert-rules
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-longhorn
+  
+spec:
+  type: NodePort
+  ports:
+  - name: web
+    nodePort: 30904
+    port: 9090
+    protocol: TCP
+    targetPort: web
+  selector:
+    prometheus: longhorn
