@@ -1,0 +1,26 @@
+cluster:
+  name: my-cluster
+
+externalServices:
+  prometheus:
+    host: http://mimir-nginx.observability.svc:80
+    # queryEndpoint: /api/v1/push
+    writeEndpoint: /api/v1/push
+    authMode: none
+    tenantId: "k8s"
+    # basicAuth:
+    #   username: "12345"
+    #   password: "It's a secret to everyone"
+  loki:
+    host: http://loki-gateway.observability.svc.cluster.local
+    authMode: none
+    tenantId: "k8s"
+    # basicAuth:
+    #   username: "67890"
+    #   password: "It's a secret to everyone"
+opencost:
+  opencost:
+    prometheus:
+      external:
+        url: http://mimir-nginx.observability.svc:80
+      existingSecretName: opencost-prom-secret

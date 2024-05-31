@@ -1,0 +1,26 @@
+loki:
+  commonConfig:
+    replication_factor: 3
+  schemaConfig:
+    configs:
+    - from: "2024-01-01"
+      store: tsdb
+      index:
+        prefix: loki_index_
+        period: 24h
+      object_store: filesystem
+      schema: v13
+  storage:
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+      admin: loki-admin
+    type: 's3'
+
+    s3:
+      endpoint: mimir-minio:9000
+      region: east
+      secretAccessKey: supersecret
+      accessKeyId: grafana-mimir
+      s3ForcePathStyle: false
+      insecure: true
