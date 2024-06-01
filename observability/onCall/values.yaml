@@ -1,0 +1,15 @@
+base_url: oncall.127.0.0.1.nip.io
+base_url_protocol: https
+
+cert-manager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+externalGrafana:
+  # Example: https://grafana.mydomain.com
+  url: http://grafana.127.0.0.1.nip.io
+
+ingress-nginx:
+  enabled: false
