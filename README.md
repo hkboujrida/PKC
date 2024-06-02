@@ -1,18 +1,5 @@
 git clone https://github.com/cheslijones/wsl2-minikube.git
-
-
-
-
-
-install cert-manager 
-install ingress
-install demo app + ingress => test
-install operators:
-prometheus/grafana/jaeger/eck
-
-install eck
-install jaeger
-install prometheus
-
-
-
+[kind](/kind/README.md)
+[prometheus operator](/observability/prom-operator/README.md)
+[cilium](/cilium/README.md)
+[nginx ingress](/ingress/README.md)

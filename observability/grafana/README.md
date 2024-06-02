@@ -1,2 +1,2 @@
-helm upgrade --install grafana grafana/grafana --namespace=observability --values values.yaml
+helm upgrade --install grafana grafana/grafana --namespace=observability --values values.yaml --create-namespace
 ```

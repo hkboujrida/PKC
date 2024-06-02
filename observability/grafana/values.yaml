@@ -9,3 +9,6 @@ ingress:
     - grafana.127.0.0.1.nip.io
 persistence:
   enabled: true
+
+plugins:
+  - grafana-oncall-app

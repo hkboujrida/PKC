@@ -24,3 +24,9 @@ opencost:
       external:
         url: http://mimir-nginx.observability.svc:80
       existingSecretName: opencost-prom-secret
+
+prometheus-operator-crds:
+  # -- Should this helm chart deploy the Prometheus Operator CRDs to the cluster.
+  # Set this to false if your cluster already has the CRDs, or if you do not
+  # to have Grafana Alloy scrape metrics from PodMonitors, Probes, or ServiceMonitors.
+  enabled: false
