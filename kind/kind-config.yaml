@@ -3,6 +3,9 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
+  extraMounts:
+    - hostPath: /home/dotexec/workspace/k8s/kind/roots.pem
+      containerPath: /etc/ssl/certs/roots.pem
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration
@@ -19,8 +22,17 @@ nodes:
     listenAddress: 127.0.0.1
     protocol: TCP
 - role: worker
+  extraMounts:
+    - hostPath: /home/dotexec/workspace/k8s/kind/roots.pem
+      containerPath: /etc/ssl/certs/roots.pem
 - role: worker
+  extraMounts:
+    - hostPath: /home/dotexec/workspace/k8s/kind/roots.pem
+      containerPath: /etc/ssl/certs/roots.pem
 - role: worker
+  extraMounts:
+    - hostPath: /home/dotexec/workspace/k8s/kind/roots.pem
+      containerPath: /etc/ssl/certs/roots.pem
 networking:
   disableDefaultCNI: true
   kubeProxyMode: none 

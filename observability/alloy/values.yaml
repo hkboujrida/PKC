@@ -7,17 +7,46 @@ externalServices:
     # queryEndpoint: /api/v1/push
     writeEndpoint: /api/v1/push
     authMode: none
-    tenantId: "k8s"
+    tenantId: "1"
     # basicAuth:
     #   username: "12345"
     #   password: "It's a secret to everyone"
   loki:
     host: http://loki-gateway.observability.svc.cluster.local
     authMode: none
-    tenantId: "k8s"
+    tenantId: "1"
     # basicAuth:
     #   username: "67890"
     #   password: "It's a secret to everyone"
+  pyroscope:
+      # -- Pyroscope host where profiles will be sent
+      # @section -- External Services (Pyroscope)
+      host: "http://pyroscope.observability.svc.cluster.local.:4040"
+    
+      tenantId: "1"
+      # -- The key for the tenant ID property in the secret
+      # @section -- External Services (Pyroscope)
+      tenantIdKey: tenantId
+
+      # -- one of "none", "basic"
+      # @section -- External Services (Pyroscope)
+      authMode: none
+
+  tempo:
+      # -- Tempo host where traces will be sent
+      # @section -- External Services (Tempo)
+      host: "http://tempo-gateway"
+
+      # -- Tempo tenant ID
+      # @section -- External Services (Tempo)
+      tenantId: "1"
+      # -- The key for the tenant ID property in the secret
+      # @section -- External Services (Tempo)
+      tenantIdKey: tenantId
+
+      # -- one of "none", "basic"
+      # @section -- External Services (Tempo)
+      authMode: none
 opencost:
   opencost:
     prometheus:
@@ -25,8 +54,35 @@ opencost:
         url: http://mimir-nginx.observability.svc:80
       existingSecretName: opencost-prom-secret
 
+
+
 prometheus-operator-crds:
   # -- Should this helm chart deploy the Prometheus Operator CRDs to the cluster.
   # Set this to false if your cluster already has the CRDs, or if you do not
   # to have Grafana Alloy scrape metrics from PodMonitors, Probes, or ServiceMonitors.
   enabled: false
+
+traces:
+  enabled: true
+  receiver:
+    filters:
+      span:
+        - attributes["http.route"] == "/live"
+        - attributes["http.route"] == "/healthy"
+        - attributes["http.route"] == "/ready"
+
+receivers:
+  jaeger:
+    grpc:
+      enabled: true
+    thriftBinary:
+      enabled: true
+    thriftCompact:
+      enabled: true
+    thriftHttp:
+      enabled: true
+  zipkin:
+    enabled: true
+
+profiles:
+  enabled: true

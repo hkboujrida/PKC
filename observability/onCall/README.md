@@ -3,5 +3,5 @@ helm repo update
 helm upgrade --install \
     --wait \
     oncall \
-    grafana/oncall --namespace=observability --create-namespace --values values.yaml
+    grafana/oncall --namespace=observability --create-namespace --values  observability/onCall/values.yaml 
 

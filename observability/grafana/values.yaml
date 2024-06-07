@@ -1,3 +1,13 @@
+podAnnotations:
+  autocert.step.sm/name: grafana.observability.svc.cluster.local
+
+extraConfigmapMounts:
+  - name: certs-configmap
+    mountPath: /etc/ssl/certs/oot-certs.crt
+    subPath: root-certs.crt # (optional)
+    configMap: edgeprime.intra
+    readOnly: true
+
 ingress:
   enabled: true
   annotations: 
@@ -12,3 +22,22 @@ persistence:
 
 plugins:
   - grafana-oncall-app
+assertNoLeakedSecrets: false
+grafana.ini:
+  server:
+    domain: grafana.127.0.0.1.nip.io
+    root_url: http://grafana.127.0.0.1.nip.io
+  auth.generic_oauth:
+    enabled: true
+    name: Keycloak-OAuth
+    allow_sign_up: true
+    client_id: grafana-oauth
+    client_secret: r9xY94IRNom735FDJrUVt7LqBRe6D8i6
+    scopes: openid email profile offline_access roles
+    email_attribute_path: email
+    login_attribute_path: username
+    name_attribute_path: full_name
+    auth_url: https://keycloak.edgeprime.intra/realms/master/protocol/openid-connect/auth
+    token_url: https://keycloak.edgeprime.intra/realms/master/protocol/openid-connect/token
+    api_url: https://keycloak.edgeprime.intra/realms/master/protocol/openid-connect/userinfo
+    role_attribute_path: contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'

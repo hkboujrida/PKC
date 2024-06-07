@@ -1,0 +1,11 @@
+externalURL: https://harbor.127.0.0.1.nip.io
+expose:
+  ingress:
+    hosts:
+      core: harbor.127.0.0.1.nip.io
+
+metrics:
+  enabled: true
+
+  serviceMonitor:
+    enabled: true

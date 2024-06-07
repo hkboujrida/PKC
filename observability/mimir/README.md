@@ -7,5 +7,5 @@ kubectl create namespace observability
 
 helm show values grafana/mimir-distributed > values.yaml
 
-helm upgrade --install mimir --namespace=observability grafana/mimir-distributed --values values.yaml --create-namespace
+helm upgrade --install mimir --namespace=observability grafana/mimir-distributed --values observability/mimir/values.yaml --create-namespace
 ```

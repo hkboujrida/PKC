@@ -33,6 +33,9 @@ spec:
             cpu: "1000m"
         ports:
         - containerPort: 3306
+        envFrom:
+          - configMapRef:
+              name: myapp
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:

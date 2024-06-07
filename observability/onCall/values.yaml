@@ -9,7 +9,7 @@ grafana:
 
 externalGrafana:
   # Example: https://grafana.mydomain.com
-  url: http://grafana.127.0.0.1.nip.io
+  url: http://grafana
 
 ingress-nginx:
   enabled: false
