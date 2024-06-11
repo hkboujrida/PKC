@@ -1,3 +1,5 @@
+# git clone https://github.com/cheslijones/wsl2-minikube.git
+
 Set-ExecutionPolicy Bypass -Scope Process -Force;
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
