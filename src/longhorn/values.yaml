@@ -1,0 +1,7 @@
+ingress:
+  enabled: true
+  host: longhorn.apps.edgeprime.intra
+
+metrics:
+  serviceMonitor:
+    enabled: true

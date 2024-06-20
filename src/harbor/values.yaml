@@ -1,8 +1,8 @@
-externalURL: https://harbor.127.0.0.1.nip.io
+externalURL: https://harbor.apps.edgeprime.intra
 expose:
   ingress:
     hosts:
-      core: harbor.127.0.0.1.nip.io
+      core: harbor.apps.edgeprime.intra
 
 metrics:
   enabled: true

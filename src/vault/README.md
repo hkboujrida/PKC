@@ -1,7 +1,7 @@
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm search repo hashicorp/vault
 
-helm upgrade --install vault hashicorp/vault --version 0.28.0 --namespace vault --create-namespace --values values.yaml
+helm upgrade --install vault hashicorp/vault --version 0.28.0 --namespace vault --create-namespace --values vault/values.yaml
 
 
 vault login token=$(kubectl get secret vault-unseal-keys -o jsonpath="{.data.vault-root}" | base64 --decode)
@@ -17,5 +17,5 @@ vault login token=$(kubectl get secret vault-unseal-keys -o jsonpath="{.data.vau
 
   vault write auth/oidc/role/your-default-role \
       user_claim="sub" \
-      allowed_redirect_uris="http://vault.127.0.0.1.nip.io/ui/vault/auth/oidc/oidc/callback" \
+      allowed_redirect_uris="http://vault.apps.edgeprime.intra/ui/vault/auth/oidc/oidc/callback" \
       policies="policy1,policy2"

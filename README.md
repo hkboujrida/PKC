@@ -75,3 +75,9 @@ pyhton3 -m venv .env
 source .env/bin/activate
 pip install mkdocs-material
 ```
+
+
+kubectl patch storageclass local-path -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+
+https://epam.github.io/edp-install/operator-guide/

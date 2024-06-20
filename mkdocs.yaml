@@ -50,5 +50,16 @@ nav:
     - getting-started.md
     - kind: kind/README.md
     - Prometheus Operator: observability/prom-operator/README.md
+    - Longhorn: longhorn/README.md
     - Cilium: cilium/README.md
+    - Postgres: postgres/README.md
+    - Keycloak: keycloak/README.md
     - Ingress: ingress/README.md
+    - Observability:
+      - Grafana: observability/grafana/README.md
+      - Loki: observability/loki/README.md
+      - Mimir: observability/mimir/README.md
+      - Tempo: observability/tempo/README.md
+      - Alloy: observability/alloy/README.md
+      - OnCall: observability/onCall/README.md
+      - Pyroscope: observability/pyroscope/README.md

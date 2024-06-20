@@ -3,7 +3,7 @@ server:
     enabled: true
   
     hosts:
-      - host: vault.127.0.0.1.nip.io
+      - host: vault.apps.edgeprime.intra
     
 serverTelemetry:
   serviceMonitor:
