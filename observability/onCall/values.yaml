@@ -1,0 +1,15 @@
+base_url: oncall.apps.edgeprime.intra
+base_url_protocol: https
+
+cert-manager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+externalGrafana:
+  # Example: https://grafana.mydomain.com
+  url: http://grafana
+
+ingress-nginx:
+  enabled: false

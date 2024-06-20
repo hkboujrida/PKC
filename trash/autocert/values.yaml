@@ -1,0 +1,30 @@
+step-certificates:
+  enabled: false
+ca:
+  # url is the step-certificates url to use.
+  url: "https://ca.edgeprime.intra:9000"
+  # provisioner is the provisioner name and the plaintext password that autocert
+  # will use.
+  provisioner:
+    name: autocert
+    password: autocert1234
+  # certs is the configmap in yaml that should contain the CA root certificate.
+  certs:
+    root_ca.crt: |-
+      -----BEGIN CERTIFICATE-----
+      MIIBujCCAWGgAwIBAgIQAuVtmBw26DLgW+P6qRs/qjAKBggqhkjOPQQDAjA8MRgw
+      FgYDVQQKEw9lZGdlcHJpbWUuaW50cmExIDAeBgNVBAMTF2VkZ2VwcmltZS5pbnRy
+      YSBSb290IENBMB4XDTIzMDgzMDE2MDMyMFoXDTMzMDgyNzE2MDMyMFowPDEYMBYG
+      A1UEChMPZWRnZXByaW1lLmludHJhMSAwHgYDVQQDExdlZGdlcHJpbWUuaW50cmEg
+      Um9vdCBDQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPy+xtsx1IZSIHWeaPVH
+      8C+SzEIfl4cqdHHcKyU0olsTu3Dzj0mwjs4M8QYsiR7u7GW36wzO0UzdXuTWZ6Cn
+      6OGjRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1Ud
+      DgQWBBRvkmt2PH4c1gZ06heIs0gPpGaxsDAKBggqhkjOPQQDAgNHADBEAiADo9yr
+      L7LTC1aLVeO8G2ZEj7ujo0jX1x8uinNSds0IMQIgFnEe28WywHsyCTa+yiTStUiX
+      XnjLeNlJzOt8dlZPW04=
+      -----END CERTIFICATE-----
+
+  # config is the configmap in yaml to use. This is currently optional only.
+  config:
+    defaults.json: |-
+      {}

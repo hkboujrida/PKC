@@ -1,0 +1,3 @@
+gateway:
+  # -- Specifies whether the gateway should be enabled
+  enabled: true

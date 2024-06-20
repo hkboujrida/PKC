@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - mysql.yaml
+  - wordpress.yaml
+
+# replace environment variable WORDPRESS_DB_HOST with new value
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: wordpress
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: mysql.tuto1.svc.cluster.local
+      - op: replace
+        path: /spec/template/spec/containers/image
+        value: wordpress:5.8.0-apache

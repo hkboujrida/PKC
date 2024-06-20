@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jaeger-secret
+type: Opaque
+data:
+  ES_USERNAME: ZWxhc3RpYw==
+  ES_PASSWORD: Y0ZFMnRTcjlhMzZLNk0xM0ZmNHI0dTBa
+---
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger-prod
+spec:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    hosts:
+      - jaeger.hbinsight.local
+  # strategy: production
+  storage:
+    type: elasticsearch # <1>
+    options:
+      es:
+        server-urls: https://elasticsearch-es-http:9200 # <2>
+        index-prefix: my-prefix
+        tls: # <3>
+          ca: /es/certificates/ca.crt
+    secretName: jaeger-secret # <4>
+  volumeMounts: # <5>
+    - name: certificates
+      mountPath: /es/certificates/
+      readOnly: true
+  volumes:
+    - name: certificates
+      secret:
+        secretName: elasticsearch-es-http-certs-public

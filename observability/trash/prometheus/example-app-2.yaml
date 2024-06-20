@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-app2
+  template:
+    metadata:
+      labels:
+        app: example-app2
+    spec:
+      containers:
+      - name: example-app2
+        image: quay.io/brancz/prometheus-example-app:v0.3.0
+        ports:
+        - name: web
+          containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: example-app2
+  labels:
+    app: example-app2
+  # annotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/port: "8080"
+spec:
+  selector:
+    app: example-app2
+  ports:
+  - name: web
+    port: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: example-app2
+  labels:
+    team: frontend
+spec:
+  selector:
+    matchLabels:
+      app: example-app2
+  endpoints:
+  - port: web

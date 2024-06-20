@@ -1,0 +1,11 @@
+externalURL: https://harbor.apps.edgeprime.intra
+expose:
+  ingress:
+    hosts:
+      core: harbor.apps.edgeprime.intra
+
+metrics:
+  enabled: true
+
+  serviceMonitor:
+    enabled: true

@@ -1,0 +1,10 @@
+server:
+  ingress:
+    enabled: true
+  
+    hosts:
+      - host: vault.apps.edgeprime.intra
+    
+serverTelemetry:
+  serviceMonitor:
+    enabled: true
